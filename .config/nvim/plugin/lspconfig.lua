@@ -31,7 +31,7 @@ local on_attach = function(client, bufnr)
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  --buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  -- buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   --buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 end
@@ -96,7 +96,6 @@ nvim_lsp.lua_ls.setup {
         -- Get the language server to recognize the `vim` global
         globals = { 'vim' },
       },
-
       workspace = {
         -- Make the server aware of Neovim runtime files
         library = vim.api.nvim_get_runtime_file("", true),
@@ -113,7 +112,14 @@ nvim_lsp.tailwindcss.setup {
 
 nvim_lsp.cssls.setup {
   on_attach = on_attach,
-  capabilities = capabilities
+  capabilities = capabilities,
+  settings = {
+    css = {
+      lint = {
+        unknownAtRules = 'ignore',
+      },
+    },
+  },
 }
 
 nvim_lsp.astro.setup {
@@ -123,11 +129,11 @@ nvim_lsp.astro.setup {
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = true,
-  update_in_insert = false,
-  virtual_text = { spacing = 4, prefix = "●" },
-  severity_sort = true,
-}
+    underline = true,
+    update_in_insert = false,
+    virtual_text = { spacing = 4, prefix = "●" },
+    severity_sort = true,
+  }
 )
 
 -- Diagnostic symbols in the sign column (gutter)
